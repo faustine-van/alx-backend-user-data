@@ -2,6 +2,7 @@
 """
     that returns the log message obfuscated
 """
+import bcrypt 
 from typing import List
 import re
 import logging
@@ -68,9 +69,9 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """connector to database"""
     try:
         db = mysql.connector.connect(
-            host=os.getenv('PERSONAL_DATA_DB_HOST'),
-            user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
-            password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
+            host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
+            user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
+            password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ""),
             database=os.getenv('PERSONAL_DATA_DB_NAME')
         )
         return db
