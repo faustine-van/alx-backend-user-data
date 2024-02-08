@@ -6,8 +6,8 @@ from typing import List
 import re
 import logging
 
-field_list = []
-file = open('user_data.csv', 'r')
+
+file = open('user_data.csv', 'r', encoding='utf-8')
 first_line = file.readline()
 args = first_line.split(',')
 PII_FIELDS = tuple(args[1:-2])
@@ -47,7 +47,11 @@ def get_logger() -> logging.Logger:
     """returns a logging.Logger object"""
     # Create a logger and configure logging
     logger = logging.getLogger("user_data")
+    # set logging level
     logger.setLevel(logging.INFO)
+    # prevents propagate messages to other loggers
+    # set propagate to False
+    logger.propagate = False
     # create handler
     handler = logging.StreamHandler()
     form = RedactingFormatter(fields=PII_FIELDS)
