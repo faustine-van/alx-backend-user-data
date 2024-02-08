@@ -6,8 +6,8 @@ from typing import List
 import re
 import logging
 import os
-from mysql.connector import MySQLConnection
 import mysql.connector
+from mysql.connector import MySQLConnection
 
 
 file = open('user_data.csv', 'r', encoding='utf-8')
