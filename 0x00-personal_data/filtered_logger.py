@@ -6,6 +6,12 @@ from typing import List
 import re
 import logging
 
+field_list = []
+file = open('user_data.csv', 'r')
+first_line = file.readline()
+args = first_line.split(',')
+PII_FIELDS = tuple(args[1:-2])
+
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
@@ -35,3 +41,18 @@ class RedactingFormatter(logging.Formatter):
                                   record.msg, self.SEPARATOR)
         record.msg = filter_msg
         return super().format(record)
+
+
+def get_logger() -> logging.Logger:
+    """returns a logging.Logger object"""
+    # Create a logger and configure logging
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    # create handler
+    handler = logging.StreamHandler()
+    form = RedactingFormatter(fields=PII_FIELDS)
+    handler.setFormatter(form.format(logger))
+    # add handler
+    logger.addHandler(handler)
+
+    return logger
