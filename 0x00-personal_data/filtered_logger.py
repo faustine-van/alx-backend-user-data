@@ -7,7 +7,6 @@ import re
 import logging
 import os
 import mysql.connector
-from mysql.connector import MySQLConnection
 
 
 file = open('user_data.csv', 'r', encoding='utf-8')
@@ -67,9 +66,9 @@ def get_logger() -> logging.Logger:
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Returns a connector to a MySQL database """
     db = mysql.connector.connection.MySQLConnection(
-        user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
-        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ""),
-        host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
-        database=os.getenv('PERSONAL_DATA_DB_NAME')
+        user=os.environ('PERSONAL_DATA_DB_USERNAME', "root"),
+        password=os.environ('PERSONAL_DATA_DB_PASSWORD', ""),
+        host=os.environ('PERSONAL_DATA_DB_HOST', "localhost"),
+        database=os.environ('PERSONAL_DATA_DB_NAME')
     )
     return db
