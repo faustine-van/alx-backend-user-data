@@ -61,7 +61,6 @@ def get_logger() -> logging.Logger:
     handler.setFormatter(formatter)
     # add handler
     logger.addHandler(handler)
-
     return logger
 
 
