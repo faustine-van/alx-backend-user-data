@@ -2,12 +2,12 @@
 """
     that returns the log message obfuscated
 """
-import bcrypt
 from typing import List
 import re
 import logging
-import mysql.connector
 import os
+from mysql.connector import MySQLConnection
+import mysql.connector
 
 
 file = open('user_data.csv', 'r', encoding='utf-8')
@@ -65,10 +65,10 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> MySQLConnection:
     """connector to database"""
     try:
-        db = mysql.connector.connect(
+        db = MySQLConnection(
             host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
             user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
             password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ""),
