@@ -12,7 +12,7 @@ import os
 file = open('user_data.csv', 'r', encoding='utf-8')
 first_line = file.readline()
 args = first_line.split(',')
-PII_FIELDS = tuple(args[1:-2])
+PII_FIELDS = tuple(args[0:-3])
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -64,7 +64,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db():
     """connector to database"""
     db = mysql.connector.connect(
         host=os.getenv('PERSONAL_DATA_DB_HOST'),
