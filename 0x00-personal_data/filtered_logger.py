@@ -2,7 +2,7 @@
 """
     that returns the log message obfuscated
 """
-from typing import List
+from typing import List, Optional
 import re
 import logging
 import os
@@ -65,7 +65,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> MySQLConnection:
+def get_db() -> Optional[MySQLConnection]:
     """connector to database"""
     db = mysql.connector.connect(
         user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
