@@ -51,7 +51,7 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     # prevents propagate messages to other loggers
     # set propagate to False
-    logger.propagate = False
+    # logger.propagate = False
     # create handler
     handler = logging.StreamHandler()
     formatter = RedactingFormatter(fields=PII_FIELDS)
