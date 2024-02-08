@@ -2,7 +2,7 @@
 """
     that returns the log message obfuscated
 """
-import bcrypt 
+import bcrypt
 from typing import List
 import re
 import logging
