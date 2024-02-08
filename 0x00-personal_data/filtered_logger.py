@@ -10,7 +10,7 @@ import logging
 file = open('user_data.csv', 'r', encoding='utf-8')
 first_line = file.readline()
 args = first_line.split(',')
-PII_FIELDS = tuple(args[1:-2])
+PII_FIELDS = tuple(args[2:-1])
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -51,7 +51,7 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     # prevents propagate messages to other loggers
     # set propagate to False
-    # logger.propagate = False
+    logger.propagate = False
     # #create handler
     handler = logging.StreamHandler()
     formatter = RedactingFormatter(fields=PII_FIELDS)
