@@ -65,10 +65,36 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Returns a connector to a MySQL database """
-    db = mysql.connector.connection.MySQLConnection(
+    db = mysql.connector.connect(
         user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
         password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ""),
         host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
         database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
     return db
+
+
+def main() -> None:
+    """ retrieve all rows in the users table
+        and display each row under a filtered format
+    """
+    messages = []
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users;")
+    # Fetch the column names (titles) from the cursor description
+    fields_names = [column[0] for column in cursor.description]
+    for row in cursor:
+        row_list = []
+        for field, value in zip(fields_names, row):
+            form = f'{field}={value}'
+            row_list.append(form)
+        messages.append('; '.join(row_list))
+
+    logger = get_logger()
+    for msg in messages:
+        logger.info(msg)
+
+
+if __name__ == '__main__':
+    main()
