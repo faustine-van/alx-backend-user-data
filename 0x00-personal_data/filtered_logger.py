@@ -87,9 +87,9 @@ def main() -> None:
     for row in cursor:
         row_list = []
         for field, value in zip(fields_names, row):
-            form = f'{field}={value}'
+            form = f'{field}={value};'
             row_list.append(form)
-        messages.append('; '.join(row_list))
+        messages.append(' '.join(row_list))
 
     logger = get_logger()
     for msg in messages:
