@@ -1,100 +1,87 @@
 #!/usr/bin/env python3
-"""
-    that returns the log message obfuscated
-"""
-from typing import List
+'''Regex-ing
+   module
+'''
 import re
+from typing import List
 import logging
 import os
 import mysql.connector
 
 
-file = open('user_data.csv', 'r', encoding='utf-8')
-first_line = file.readline()
-args = first_line.split(',')
-PII_FIELDS = tuple(args[0:-3])
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
-def filter_datum(fields: List[str], redaction: str,
-                 message: str, separator: str) -> str:
-    """return:  log message"""
+def filter_datum(fields: List[str],
+                 redaction: str,
+                 message: str,
+                 separator: str) -> str:
+    '''returns the log
+       message obfuscated
+    '''
     for field in fields:
-        pattern = rf'({re.escape(field)}=)([^{re.escape(separator)}]*)'
-        message = re.sub(pattern, rf'\1{redaction}', message)
+        pattern = re.compile(fr'{re.escape(field)}=.*?{re.escape(separator)}')
+        replacement = f'{field}={redaction}{separator}'
+        message = re.sub(pattern, replacement, message)
     return message
 
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-    """
+        """
 
     REDACTION = "***"
-    # custom formatter instead of self.DEFAULT_FORMAT by default
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
-        super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
+        super(RedactingFormatter, self).__init__(self.FORMAT)
 
     def format(self, record: logging.LogRecord) -> str:
-        """method to filter values in incoming log records"""
-        filter_msg = filter_datum(self.fields, self.REDACTION,
+        '''format method to filter values in incoming log'''
+        record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.msg, self.SEPARATOR)
-        record.msg = filter_msg
         return super().format(record)
 
 
 def get_logger() -> logging.Logger:
-    """returns a logging.Logger object"""
-    # Create a logger and configure logging
-    logger = logging.getLogger("user_data")
-    # set logging level
+    '''returning a logger'''
+    logger = logging.getLogger('user_data')
     logger.setLevel(logging.INFO)
-    # prevents propagate messages to other loggers
-    # set propagate to False
     logger.propagate = False
-    # #create handler
-    handler = logging.StreamHandler()
-    formatter = RedactingFormatter(fields=PII_FIELDS)
-    handler.setFormatter(formatter)
-    # add handler
-    logger.addHandler(handler)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.addHandler(stream_handler)
     return logger
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """ Returns a connector to a MySQL database """
-    db = mysql.connector.connect(
-        user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
-        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ""),
-        host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
-        database=os.getenv('PERSONAL_DATA_DB_NAME')
-    )
-    return db
-
-
-def main() -> None:
-    """ retrieve all rows in the users table
-        and display each row under a filtered format
+    """ return mysql.connector
     """
-    messages = []
-    conn = get_db()
-    cursor = conn.cursor()
+    user = os.getenv('PERSONAL_DATA_DB_USERNAME') or "root"
+    passwd = os.getenv('PERSONAL_DATA_DB_PASSWORD') or ""
+    host = os.getenv('PERSONAL_DATA_DB_HOST') or "localhost"
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+    conn = mysql.connector.connect(user=user,
+                                   password=passwd,
+                                   host=host,
+                                   database=db_name)
+    return conn
+
+
+def main():
+    """main function"""
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT * FROM users;")
-    # Fetch the column names (titles) from the cursor description
-    fields_names = [column[0] for column in cursor.description]
-    for row in cursor:
-        row_list = []
-        for field, value in zip(fields_names, row):
-            form = f'{field}={value};'
-            row_list.append(form)
-        messages.append(' '.join(row_list))
-
     logger = get_logger()
-    for msg in messages:
-        logger.info(msg)
+    for row in cursor:
+        line = ''
+        for key, value in row.items():
+            line += f'{key}={value}; '
+        logger.info(line)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
