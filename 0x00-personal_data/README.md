@@ -15,3 +15,4 @@
 - [logging documentation](https://docs.python.org/3/library/logging.html)
 - [bcrypt package](https://github.com/pyca/bcrypt/)
 - [Logging to Files, Setting Levels, and Formatting](https://www.youtube.com/watch?v=-ARI4Cz-awo)
+- [Uncovering Password Habits](https://www.digitalguardian.com/blog/uncovering-password-habits-are-users-password-security-habits-improving-infographic)
