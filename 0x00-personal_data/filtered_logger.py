@@ -43,7 +43,7 @@ class RedactingFormatter(logging.Formatter):
         return super().format(record)
 
 
-def get_logger() -> logging.Logger:
+def get_logger():
     """returns a logging.Logger object"""
     # Create a logger and configure logging
     logger = logging.getLogger("user_data")
