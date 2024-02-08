@@ -5,12 +5,14 @@
 from typing import List
 import re
 import logging
+import mysql.connector
+import os
 
 
 file = open('user_data.csv', 'r', encoding='utf-8')
 first_line = file.readline()
 args = first_line.split(',')
-PII_FIELDS = tuple(args[2:-1])
+PII_FIELDS = tuple(args[1:-2])
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -60,3 +62,14 @@ def get_logger() -> logging.Logger:
     logger.addHandler(handler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """connector to database"""
+    db = mysql.connector.connect(
+        host=os.getenv('PERSONAL_DATA_DB_HOST'),
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME')
+    )
+    return db
