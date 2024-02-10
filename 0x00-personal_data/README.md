@@ -9,6 +9,17 @@
 ### Installation
 `pip install bcrypt`
 
+ #### install connector with pip
+ ```
+    # Installation
+    $> pip install mysql-connector-python
+
+    # Upgrade
+    $> pip install mysql-connector-python --upgrade
+
+    # Optional, installs the X DevAPI interface
+    $> pip install mysqlx-connector-python
+ ```
  
 ### Reference
 - [What Is PII, non-PII, and Personal Data?](https://piwik.pro/blog/what-is-pii-personal-data/)
