@@ -61,7 +61,7 @@ class BasicAuth(Auth):
         # search user matching  with email
         users_with_email = User.search({'email': user_email})
         # check if user exists or not
-        if not users_with_email:
+        if users_with_email is None:
             return None
         # check if password match
         for user in users_with_email:
