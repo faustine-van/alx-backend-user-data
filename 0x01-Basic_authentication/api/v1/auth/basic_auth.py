@@ -58,10 +58,12 @@ class BasicAuth(Auth):
             return None
         if user_pwd is None or not isinstance(user_pwd, str):
             return None
+        if not User.all():
+            return
         # search user matching  with email
         users_with_email = User.search({'email': user_email})
         # check if user exists or not
-        if users_with_email is None:
+        if users_with_email is None or not users_with_email:
             return None
         # check if password match
         for user in users_with_email:
