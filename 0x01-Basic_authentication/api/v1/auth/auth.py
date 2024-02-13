@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """ Module of Auth the API authentication
 """
-import re
 from typing import List, TypeVar
 
 
@@ -12,9 +11,12 @@ class Auth:
         if path is None or excluded_paths is None or not excluded_paths:
             return True
         for p in excluded_paths:
-            match = p.rstrip('*')
-
-            if path == p or path == p.rstrip('/') or path.startswith(match):
+            if p.endswith('*'):
+                # If the excluded path ends with '*', remove it before matching
+                p = p[:-1]
+                if path.startswith(p):
+                    return False
+            elif path == p or path == p.rstrip('/'):
                 return False
         return True
 
