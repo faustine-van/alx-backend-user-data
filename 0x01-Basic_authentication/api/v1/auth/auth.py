@@ -13,7 +13,8 @@ class Auth:
             return True
         for p in excluded_paths:
             match = re.match(rf'{p}', path)
-            if path == p or path == p.rstrip('/') or match:
+
+            if path == p or path == p.rstrip('/') or path.startswith(match):
                 return False
         return True
 
