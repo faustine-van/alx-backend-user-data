@@ -57,15 +57,12 @@ class BasicAuth(Auth):
         # search user matching  with email
         users_with_email = User.search({'email': user_email})
         # check if user exists or not
-        if users_with_email is None or len(users_with_email) == 0:
-            return None
-        # check if password match
-        for user in users_with_email:
-            if user.is_valid_password(user_pwd):
-                return user
-            else:
-                # If no user found with matching password
-                return None
+        if users_with_email:
+            # check if password match
+            for user in users_with_email:
+                if user.is_valid_password(user_pwd):
+                    return user
+        return None
 
     def current_user(self, request=None) -> TypeVar('User'):
         """return user current"""
