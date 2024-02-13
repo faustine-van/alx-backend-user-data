@@ -29,16 +29,11 @@ class BasicAuth(Auth):
                 str):
             return None
         try:
-            base64.b64decode(base64_authorization_header, validate=True)
-        except binascii.Error:
+            decode_64 = base64.b64decode(base64_authorization_header, validate=True)
+            return decode_64.decode('utf-8')
+        except (binascii.Error, UnicodeDecodeError):
             return None
-        # converts base64_authorization_header into bytes using UTF-8 encoding
-        bytes_64 = base64_authorization_header.encode('utf-8')
-        # decodes the Base64-encoded bytes obtained
-        decode_64 = base64.b64decode(bytes_64)
-        # converts the decoded bytes back to a string using UTF-8 decoding
-        res = decode_64.decode('utf-8')
-        return res
+
 
     def extract_user_credentials(self, decoded_base64_authorization_header: str
                                  ) -> str:
