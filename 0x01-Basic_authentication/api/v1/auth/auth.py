@@ -11,7 +11,7 @@ class Auth:
         if path is None or excluded_paths is None or not excluded_paths:
             return True
         for ex_path in excluded_paths:
-            if path == ex_path or path == ex_path.rstrip('/') or path == ex_path.rstrip('*'):
+            if path == ex_path or path == ex_path.rstrip('/'):
                 return False
         return True
 
