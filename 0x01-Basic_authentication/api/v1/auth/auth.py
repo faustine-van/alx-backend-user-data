@@ -13,8 +13,11 @@ class Auth:
             return True
         for p in excluded_paths:
             m = re.match(rf'{p}', path)
-            if path == p or path == p.rstrip('/') or m.group(0):
+            if path == p or path == p.rstrip('/'):
                 return False
+            if m and m.group(0) == path:
+                return False
+                break
         return True
 
     def authorization_header(self, request=None) -> str:
