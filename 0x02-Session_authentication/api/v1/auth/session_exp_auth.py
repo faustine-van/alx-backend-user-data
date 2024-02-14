@@ -13,7 +13,7 @@ class SessionExpAuth(SessionAuth):
     """
     def __init__(self):
         """initialize variables"""
-         # Get the value of the environment variable SESSION_DURATION
+        # Get the value of the environment variable SESSION_DURATION
         session_duration_str = os.environ.get('SESSION_DURATION')
         try:
             self.session_duration = int(session_duration_str)
