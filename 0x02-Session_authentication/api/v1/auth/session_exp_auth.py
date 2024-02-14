@@ -15,7 +15,10 @@ class SessionExpAuth(SessionAuth):
         """initialize variables"""
         # Get the value of the environment variable SESSION_DURATION
         session_duration_str = os.environ.get('SESSION_DURATION')
-        self.session_duration = int(session_duration_str)
+        try:
+            self.session_duration = int(session_duration_str)
+        except (ValueError, TypeError):
+            self.session_duration = 0
 
     def create_session(self, user_id=None):
         """create session_id with expiration data"""
