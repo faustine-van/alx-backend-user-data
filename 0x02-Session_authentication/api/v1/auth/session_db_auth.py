@@ -29,7 +29,8 @@ class SessionDBAuth(SessionExpAuth):
         user_session = UserSession.get(session_id)
         # If UserSession object is found, return the user_id
         if user_session:
-            return user_session.user_id
+            user_json = user_session.to_json()
+            return user_json.get('id')
         else:
             return None
 
@@ -43,9 +44,9 @@ class SessionDBAuth(SessionExpAuth):
         # check if request doesn’t contain the Session ID cookie
         if not session_id:
             return False
-        user_id = UserSession.get(session_id)
+        user_id = UserSession.search({'session_id': session_id})
         # If the Session ID of the request is not linked to any User ID
-        if not user_id:
+        if not user_id[0]:
             return False
-        user_id.remove()
+        user_id[0].remove()
         return True
