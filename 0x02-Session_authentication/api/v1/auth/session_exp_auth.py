@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """ Module of Auth the API authentication
 """
-from api.v1.auth.session_auth import SessionAuth
-import os
 from datetime import datetime, timedelta
-from models.user import User
+import os
+from api.v1.auth.session_auth import SessionAuth
 
 
 class SessionExpAuth(SessionAuth):
