@@ -12,11 +12,8 @@ class SessionExpAuth(SessionAuth):
         for an expiration date to a Session ID.
     """
     def __init__(self):
-        """initiate"""
-        try:
-            self.session_duration = int(os.environ.get('SESSION_DURATION'))
-        except (KeyError, ValueError):
-            self.session_duration = 0
+        """initialize variables"""
+        self.session_duration = int(os.environ.get('SESSION_DURATION'))
 
     def create_session(self, user_id=None):
         """create session_id with expiration data"""
