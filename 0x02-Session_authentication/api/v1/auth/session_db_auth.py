@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Module of Auth the API authentication
 """
+from datetime import datetime, timedelta
 from api.v1.auth.session_exp_auth import SessionExpAuth
 from models.user_session import UserSession
 
@@ -26,13 +27,15 @@ class SessionDBAuth(SessionExpAuth):
         """
         if session_id is None or not isinstance(session_id, str):
             return None
-        user_session = UserSession.get(session_id)
-        # If UserSession object is found, return the user_id
-        if user_session:
-            user_json = user_session.to_json()
-            return user_json.get('id')
-        else:
+
+        user_session = UserSession.search({'session_id': session_id})
+        if user_session is None:
             return None
+
+        user_json = user_session[0].to_json()
+        if self.session_duration <= 0:
+            return user_json.get('user_id')
+        return user_json.get('user_id')
 
     def destroy_session(self, request=None):
         """destroys the UserSession based on the Session
