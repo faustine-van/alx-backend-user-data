@@ -35,10 +35,24 @@ class SessionDBAuth(SessionExpAuth):
         user_json = user_session[0].to_json()
         if self.session_duration <= 0:
             return user_json.get('user_id')
-        return user_json.get('user_id')
+        if user_session[0]:
+            return user_json.get('user_id')
+        else:
+            return None
 
     def destroy_session(self, request=None):
         """destroys the UserSession based on the Session
             ID from the request cookie
         """
-        pass
+        if request is None:
+            return False
+        session_id = self.session_cookie(request)
+        # check if request doesn’t contain the Session ID cookie
+        if not session_id:
+            return False
+        user_id = UserSession.search({'session_id': session_id})
+        # If the Session ID of the request is not linked to any User ID
+        if not user_id[0]:
+            return False
+        user_id[0].remove()
+        return True
