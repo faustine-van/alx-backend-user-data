@@ -29,12 +29,12 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_session = UserSession.search({'session_id': session_id})
-        if user_session is None:
-            return None
+        # if user_session is None:
+        #    return None
 
         user_json = user_session[0].to_json()
-        if self.session_duration <= 0:
-            return user_json.get('user_id')
+        # if self.session_duration <= 0:
+        #    return user_json.get('user_id')
         return user_json.get('user_id')
 
     def destroy_session(self, request=None):
