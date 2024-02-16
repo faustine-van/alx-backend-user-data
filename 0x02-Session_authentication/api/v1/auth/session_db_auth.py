@@ -32,10 +32,11 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_session = UserSession.search({'session_id': session_id})
-        if user_session is None:
+        if user_session is None or user_session[0] is None:
             return None
 
         user_json = user_session[0].to_json()
+
         if self.session_duration <= 0:
             return user_json.get('user_id')
         created_at = datetime.fromisoformat(user_json.get('created_at'))
