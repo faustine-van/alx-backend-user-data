@@ -14,6 +14,7 @@ class SessionDBAuth(SessionExpAuth):
         """creates and stores new instance of UserSession
             and returns the Session ID
         """
+        # If the User ID of the request is None
         if user_id is None or not isinstance(user_id, str):
             return None
 
@@ -32,8 +33,7 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_session = UserSession.search({'session_id': session_id})
-        if user_session is None or user_session[0] is None:
-            return None
+        # If the Session ID of the request is not linked to any User ID
 
         user_json = user_session[0].to_json()
 
