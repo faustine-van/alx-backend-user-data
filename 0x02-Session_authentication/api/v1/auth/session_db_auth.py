@@ -14,7 +14,8 @@ class SessionDBAuth(SessionExpAuth):
         """creates and stores new instance of UserSession
             and returns the Session ID
         """
-        # If the User ID of the request is None
+        # doesn’t return a Session ID and don’t create any UserSession
+        # record in DB if user_id = None
         if user_id is None or not isinstance(user_id, str):
             return None
 
@@ -57,9 +58,9 @@ class SessionDBAuth(SessionExpAuth):
         # check if request doesn’t contain the Session ID cookie
         if not session_id:
             return False
-        user_id = UserSession.search({'session_id': session_id})
+        user_session = UserSession.search({'session_id': session_id})
         # If the Session ID of the request is not linked to any User ID
-        if not user_id[0]:
+        if not user_session:
             return False
-        user_id[0].remove()
+        user_session[0].remove()
         return True
