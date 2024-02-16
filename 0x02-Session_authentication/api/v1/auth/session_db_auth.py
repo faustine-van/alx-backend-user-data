@@ -34,7 +34,7 @@ class SessionDBAuth(SessionExpAuth):
 
         user_session = UserSession.search({'session_id': session_id})
         # If the Session ID of the request is not linked to any User ID
-        if not user_session[0]:
+        if not user_session:
             return None
 
         user_json = user_session[0].to_json()
