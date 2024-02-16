@@ -27,26 +27,17 @@ class SessionDBAuth(SessionExpAuth):
         return session_id
 
     def user_id_for_session_id(self, session_id=None):
-        """returns the User ID by requesting UserSession
-            in the database based on session_id
         """
-        if session_id is None or not isinstance(session_id, str):
-            return None
-
-        user_session = UserSession.search({'session_id': session_id})
-        # If the Session ID of the request is not linked to any User ID
-        if not user_session:
-            return None
-
-        user_json = user_session[0].to_json()
-
-        if self.session_duration <= 0:
-            return user_json.get('user_id')
-        created_at = datetime.fromisoformat(user_json.get('created_at'))
-        expiration_time = created_at + timedelta(seconds=self.session_duration)
-        if expiration_time < datetime.now():
-            return None
-        return user_json.get('user_id')
+        Returns a user ID based on a session ID
+        Args:
+            session_id (str): session ID
+        Return:
+            user id or None if session_id is None or not a string
+        """
+        user_id = UserSession.search({"session_id": session_id})
+        if user_id:
+            return user_id
+        return None
 
     def destroy_session(self, request=None):
         """destroys the UserSession based on the Session
