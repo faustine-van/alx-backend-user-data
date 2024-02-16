@@ -32,6 +32,8 @@ class SessionDBAuth(SessionExpAuth):
         """
         if session_id is None or not isinstance(session_id, str):
             return None
+        # prevent KeyError: 'UserSession'
+        UserSession.load_from_file()
 
         user_session = UserSession.search({'session_id': session_id})
         # If the Session ID of the request is not linked to any User ID
@@ -42,9 +44,10 @@ class SessionDBAuth(SessionExpAuth):
 
         if self.session_duration <= 0:
             return user_json.get('user_id')
-        created_at = datetime.fromisoformat(user_json.get('created_at'))
+        # created_at = datetime.fromisoformat(user_json.get('created_at'))
+        created_at = user_session[0].created_at
         expiration_time = created_at + timedelta(seconds=self.session_duration)
-        if expiration_time < datetime.now():
+        if expiration_time < datetime.utcnow():
             return None
         return user_json.get('user_id')
 
