@@ -72,3 +72,4 @@ API_HOST=0.0.0.0 API_PORT=5000 ./main_4.py
 4. [Custom Error Pages](https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/)
 5. [HTTP Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie)
 5. [Flask Cookie](https://flask.palletsprojects.com/en/1.1.x/quickstart/#cookies)
+6. [Python-Flask: Flask-HTTPAuth](https://flask-httpauth.readthedocs.io/en/latest/)
