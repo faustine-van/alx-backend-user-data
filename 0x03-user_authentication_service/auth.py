@@ -66,16 +66,15 @@ class Auth:
         """validate login"""
         try:
             user = self._db.find_user_by(email=email)
+            if user:
+                bytePass = password.encode('utf-8')
+                if bcrypt.checkpw(bytePass, user.hashed_password):
+                    return True
+                else:
+                    return False
+            return False
         except NoResultFound:
             pass
-
-        if user:
-            bytePass = password.encode('utf-8')
-            if bcrypt.checkpw(bytePass, user.hashed_password):
-                return True
-            else:
-                return False
-        return False
 
     def create_session(self, email: str) -> str:
         """return session id for user corresponding to the emai
