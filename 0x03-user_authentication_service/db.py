@@ -54,7 +54,7 @@ class DB:
                     raise InvalidRequestError('Invalid')
         return user
 
-    def update_user(self, user_id: int, **kwargs) -> TypeVar('User'):
+    def update_user(self, user_id: int, **kwargs) -> User:
         """update user"""
         res = self.find_user_by(id=user_id)
         if res:
