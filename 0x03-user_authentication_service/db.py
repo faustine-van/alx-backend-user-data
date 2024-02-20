@@ -3,7 +3,7 @@
 """
 from typing import TypeVar
 from sqlalchemy import create_engine
-from sqlalchemy.exc import NoResultFound, IntegrityError, InvalidRequestError
+from sqlalchemy.exc import NoResultFound, InvalidRequestError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 
@@ -35,11 +35,7 @@ class DB:
         """add user to the database"""
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
-        try:
-            self._session.commit()   # save into databases
-        except IntegrityError:
-            self._session.rollback()
-            raise ValueError('user with email alread exists')
+        self._session.commit()   # save into databases
         return user
 
     def find_user_by(self, **kwargs) -> TypeVar('User'):
