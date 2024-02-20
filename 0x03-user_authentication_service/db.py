@@ -35,7 +35,7 @@ class DB:
         """add user to the database"""
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
-        self._session.commit()   # save into databases
+        self._session.commit()
         return user
 
     def find_user_by(self, **kwargs) -> TypeVar('User'):
