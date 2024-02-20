@@ -41,7 +41,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> TypeVar('User'):
+    def register_user(self, email: str, password: str) -> User:
         """register user and save the user to the databas
         """
         user_w_email = self._db._session.query(User
