@@ -53,7 +53,7 @@ class DB:
                     raise InvalidRequestError('Invalid')
         return user
 
-    def update_user(self, user_id: int, **kwargs) -> User:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """updated user and save in databases
 
         Args:
@@ -71,4 +71,3 @@ class DB:
                     raise ValueError('Error')
             self._session.commit()
             return None
-        return None
