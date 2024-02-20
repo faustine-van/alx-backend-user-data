@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """DB module
 """
-from typing import TypeVar, Dict
 from sqlalchemy import create_engine
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
@@ -55,7 +54,14 @@ class DB:
         return user
 
     def update_user(self, user_id: int, **kwargs) -> User:
-        """update user"""
+        """updated user and save in databases
+
+        Args:
+            user_id (str): The password to hash
+            kwargs: arbitrary argument
+        Returns:
+            User Objects
+        """
         res = self.find_user_by(id=user_id)
         if res:
             for key, val in kwargs.items():
