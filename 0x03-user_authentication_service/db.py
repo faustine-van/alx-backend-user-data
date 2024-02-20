@@ -71,3 +71,4 @@ class DB:
                     raise ValueError('Error')
             self._session.commit()
             return None
+        return None
