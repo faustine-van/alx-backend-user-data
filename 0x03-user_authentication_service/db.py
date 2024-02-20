@@ -39,6 +39,7 @@ class DB:
             self._session.commit()
         except Exception:
             self._session.rollback()
+            return None
         return user
 
     def find_user_by(self, **kwargs: Dict) -> User:
