@@ -70,4 +70,4 @@ class DB:
                 else:
                     raise ValueError('Error')
             self._session.commit()
-            return res
+            return None
