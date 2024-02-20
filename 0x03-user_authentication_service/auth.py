@@ -3,6 +3,7 @@
     input password, hashed with bcrypt.hashpw.
 """
 from typing import TypeVar
+from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 import bcrypt
 from db import DB
@@ -44,12 +45,14 @@ class Auth:
     def register_user(self, email: str, password: str) -> User:
         """register user and save the user to the databas
         """
-        user_w_email = self._db._session.query(User
-                                               ).filter_by(email=email).first()
-        if user_w_email:
+
+        # user_w_email = self._db._session.query(User).filter_by(email=email).first()
+        try:
+            self._db.find_user_by(email=email)
             raise ValueError(f'User {email} already exists.')
-        user = self._db.add_user(email, _hash_password(password))
-        return user
+        except NoResultFound:
+            user = self._db.add_user(email, _hash_password(password))
+            return user
 
     def valid_login(self, email: str, password: str) -> bool:
         """validate login"""
