@@ -45,8 +45,8 @@ class Auth:
     def register_user(self, email: str, password: str) -> User:
         """register user and save the user to the databas
         """
-
-        # user_w_email = self._db._session.query(User).filter_by(email=email).first()
+        # user_w_email = self._db._session.query(User).filter_by(email=email
+        # ).first()
         try:
             self._db.find_user_by(email=email)
             raise ValueError(f'User {email} already exists.')
