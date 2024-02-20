@@ -14,10 +14,10 @@ def _hash_password(password: str) -> bytes:
 
     Args:
         password (str): The password to hash
-        
+
     Returns:
         bytes: Salted hash of the input password
-        """
+    """
     byte = password.encode('utf-8')
     gen_salt = bcrypt.gensalt()
     hashpass = bcrypt.hashpw(byte, gen_salt)
