@@ -64,7 +64,11 @@ class Auth:
 
     def valid_login(self, email: str, password: str) -> bool:
         """validate login"""
-        user = self._db._session.query(User).filter_by(email=email).first()
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            pass
+
         if user:
             bytePass = password.encode('utf-8')
             if bcrypt.checkpw(bytePass, user.hashed_password):
