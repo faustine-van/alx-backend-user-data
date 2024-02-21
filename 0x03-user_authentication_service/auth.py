@@ -117,14 +117,13 @@ class Auth:
         Returns:
             str: Return the token if user exists or raise error if not.
         """
-        user = self._db._session.query(User
-                                       ).filter_by(email=email).first()
-        # If the user does not exist
-        if not user:
+        try:
+            user = self._db.find_user_by(email=email)
+            new_reset_token = _generate_uuid()
+            self._db.update_user(user.id, reset_token=new_reset_token)
+            return new_reset_token
+        except NoResultFound:
             raise ValueError()
-        new_reset_token = _generate_uuid()
-        self._db.update_user(user.id, reset_token=new_reset_token)
-        return new_reset_token
 
     def update_password(self, reset_token: str, password: str) -> None:
         """Generate a UUID reset token.
