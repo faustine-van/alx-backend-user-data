@@ -54,8 +54,9 @@ class Auth:
         """
         try:
             # Check if user with email already exists
-            self._db.find_user_by(email=email)
-            raise ValueError(f'User {email} already exists')
+            user = self._db.find_user_by(email=email)
+            if not user:
+                raise ValueError(f'User {email} already exists')
         except NoResultFound:
             # Hash the password
             hashed_pass = _hash_password(password)
@@ -91,7 +92,7 @@ class Auth:
         except NoResultFound:
             pass
 
-    def get_user_from_session_id(self, session_id: str) -> TypeVar('User'):
+    def get_user_from_session_id(self, session_id: str) -> User:
         """returns the corresponding User or None using session_id
         """
         user = self._db._session.query(User
