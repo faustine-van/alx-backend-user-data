@@ -67,7 +67,7 @@ class Auth:
         user = self._db._session.query(User).filter_by(email=email).first()
         if user:
             bytePass = password.encode('utf-8')
-            if bcrypt.checkpw(bytePass, user.hashed_password):
+            if bcrypt.checkpw(bytePass, user.hashed_password) is True:
                 return True
             return False
         return False
