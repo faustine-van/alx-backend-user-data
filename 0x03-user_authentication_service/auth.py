@@ -82,11 +82,14 @@ class Auth:
     def create_session(self, email: str) -> str:
         """return session id for user corresponding to the emai
         """
-        user = self._db._session.query(User).filter_by(email=email).first()
-        if user:
-            new_session_id = _generate_uuid()
-            self._db.update_user(user.id, session_id=new_session_id)
-            return new_session_id
+        try:
+            user = self._db.find_user_by(email=email)
+            if user:
+                new_session_id = _generate_uuid()
+                self._db.update_user(user.id, session_id=new_session_id)
+                return new_session_id
+        except NoResultFound:
+            pass
 
     def get_user_from_session_id(self, session_id: str) -> TypeVar('User'):
         """returns the corresponding User or None using session_id
