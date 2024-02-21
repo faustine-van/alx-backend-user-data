@@ -63,13 +63,20 @@ class Auth:
             return new_user
 
     def valid_login(self, email: str, password: str) -> bool:
-        """validate login"""
+        """Validate login credentials.
+
+        Args:
+            email (str): Email of the user.
+            password (str): Password of the user.
+
+        Returns:
+            bool: True if login is valid, False otherwise.
+        """
         user = self._db._session.query(User).filter_by(email=email).first()
         if user:
             bytePass = password.encode('utf-8')
-            if bcrypt.checkpw(bytePass, user.hashed_password) is True:
+            if bcrypt.checkpw(bytePass, user.hashed_password):
                 return True
-            return False
         return False
 
     def create_session(self, email: str) -> str:
