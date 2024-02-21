@@ -54,7 +54,7 @@ class Auth:
         """
         try:
             # Check if user with email already exists
-            user_with_email = self._db.find_user_by(email=email)
+            self._db.find_user_by(email=email)
             raise ValueError(f'User {email} already exists')
         except NoResultFound:
             # Hash the password
@@ -75,8 +75,7 @@ class Auth:
         user = self._db._session.query(User).filter_by(email=email).first()
         if user:
             bytepass = password.encode('utf-8')
-            bytehashpass = user.hashed_password.encode('utf-8')
-            if bcrypt.checkpw(bytepass, bytehashpass):
+            if bcrypt.checkpw(bytepass, user.hashed_password):
                 return True
         return False
 
