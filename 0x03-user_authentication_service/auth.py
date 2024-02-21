@@ -69,8 +69,7 @@ class Auth:
             bytePass = password.encode('utf-8')
             if bcrypt.checkpw(bytePass, user.hashed_password):
                 return True
-            else:
-                return False
+            return False
         return False
 
     def create_session(self, email: str) -> str:
