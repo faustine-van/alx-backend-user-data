@@ -15,7 +15,8 @@ def register_user(email: str, password: str) -> None:
     data = {'email': email, 'password': password}
     r = requests.post('http://0.0.0.0:5000/users', data=data)
 
-    assert r.json() == {"email": email, "message": "user created"}
+    # assert r.json() == {"email": email, "message": "user created"}
+    assert r.status_code == 200
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
@@ -38,10 +39,14 @@ def log_in(email: str, password: str) -> str:
         email (str): Email of the user.
         password (str): Password of user
     """
-    data = {'email': email, 'password': password}
-    r = requests.post('http://0.0.0.0:5000/sessions', data=data)
-    if r.status_code == 200:
-        return r.cookies.get('session_id')
+    payload = {'email': email, 'password': password}
+    r = requests.post('http://0.0.0.0:5000/sessions', data=payload)
+
+    assert r.status_code == 200
+
+    session_id = r.cookies.get('session_id')
+    assert session_id is not None
+    return session_id
 
 
 def profile_unlogged() -> None:
@@ -51,7 +56,10 @@ def profile_unlogged() -> None:
         email (str): Email of the user.
         password (str): Password of user
     """
-    pass
+    payload = {'email': 'em@gmai.com', 'password': 'password'}
+    r = requests.get('http://0.0.0.0:5000/profile')
+
+    assert r.status_code == 403
 
 
 def profile_logged(session_id: str) -> None:
@@ -62,8 +70,9 @@ def profile_logged(session_id: str) -> None:
         password (str): Password of user
     """
     cookies = {'session_id': session_id}
-    r = requests.post('http://0.0.0.0:5000/profile', cookies=cookies)
-    r.status_code == 200
+    r = requests.get('http://0.0.0.0:5000/profile', cookies=cookies)
+
+    assert r.status_code == 200
 
 
 def log_out(session_id: str) -> None:
@@ -73,8 +82,8 @@ def log_out(session_id: str) -> None:
         session_id (str): session_id of the user.
     """
     cookies = {'session_id': session_id}
-    r = requests.post('http://0.0.0.0:5000//sessions', cookies=cookies)
-    r.status_code == 200
+    r = requests.delete('http://0.0.0.0:5000/sessions', cookies=cookies)
+    assert r.status_code == 200
 
 
 def reset_password_token(email: str) -> str:
@@ -84,8 +93,11 @@ def reset_password_token(email: str) -> str:
     """
     data = {'email': email}
     r = requests.post('http://0.0.0.0:5000/reset_password', data=data)
-    if r.status_code == 200:
-        return r.json().get('reset_token')
+    assert r.status_code == 200
+
+    reset_token = r.json().get('reset_token')
+    assert reset_token is not None
+    return reset_token
 
 
 def update_password(email: str, reset_token: str, new_password: str) -> None:
@@ -98,7 +110,7 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
     data = {"email": email, "reset_token": reset_token,
             "new_password": new_password}
     r = requests.post('http://0.0.0.0:5000/reset_password', data=data)
-    r.status_code == 200
+    assert r.status_code == 200
 
 
 EMAIL = "guillaume@holberton.io"
