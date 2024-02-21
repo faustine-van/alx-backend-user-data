@@ -73,12 +73,13 @@ class Auth:
         Returns:
             bool: True if login is valid, False otherwise.
         """
-        user = self._db._session.query(User).filter_by(email=email).first()
-        if user:
+        try:
+            user = self._db.find_user_by(email=email)
             bytepass = password.encode('utf-8')
             if bcrypt.checkpw(bytepass, user.hashed_password):
                 return True
-        return False
+        except NoResultFound:
+            return False
 
     def create_session(self, email: str) -> str:
         """return session id for user corresponding to the emai
