@@ -90,6 +90,7 @@ def reset_password_token(email: str) -> str:
     """reset password
     Args:
         email (str): Email of the user
+        reset
     """
     data = {'email': email}
     r = requests.post('http://0.0.0.0:5000/reset_password', data=data)
