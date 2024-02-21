@@ -55,7 +55,7 @@ class Auth:
         try:
             # Check if user with email already exists
             user = self._db.find_user_by(email=email)
-            if not user:
+            if user:
                 raise ValueError(f'User {email} already exists')
         except NoResultFound:
             # Hash the password
