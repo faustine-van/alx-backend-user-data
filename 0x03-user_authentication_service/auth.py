@@ -80,6 +80,7 @@ class Auth:
                 return True
         except NoResultFound:
             return False
+        return False
 
     def create_session(self, email: str) -> str:
         """return session id for user corresponding to the emai
