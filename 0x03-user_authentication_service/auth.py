@@ -55,7 +55,7 @@ class Auth:
         try:
             # Check if user with email already exists
             user = self._db.find_user_by(email=email)
-            if user is not None:
+            if user:
                 raise ValueError(f'User {email} already exists')
         except NoResultFound:
             # Hash the password
@@ -95,10 +95,11 @@ class Auth:
     def get_user_from_session_id(self, session_id: str) -> User:
         """returns the corresponding User or None using session_id
         """
-        user = self._db._session.query(User
-                                       ).filter_by(session_id=session_id
-                                                   ).first()
-        if session_id is None or not user:
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+        except NoResultFound:
             return None
         return user
 
