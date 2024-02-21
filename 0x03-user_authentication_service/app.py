@@ -73,6 +73,8 @@ def get_reset_password_token():
     """generate token for reseting password
     """
     email = request.form.get('email')
+
+    # Check if the email is registered
     try:
         reset_token = AUTH.get_reset_password_token(email)
     except ValueError:
