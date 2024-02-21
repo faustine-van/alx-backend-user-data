@@ -124,7 +124,7 @@ class Auth:
             self._db.update_user(user.id, reset_token=new_reset_token)
             return new_reset_token  # return new tken
         except NoResultFound:
-            raise ValueError(f"User with email {email} does not exist")
+            raise ValueError()
 
     def update_password(self, reset_token: str, password: str) -> None:
         """Generate a UUID reset token.
