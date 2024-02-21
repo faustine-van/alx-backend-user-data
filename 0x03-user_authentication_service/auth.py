@@ -2,7 +2,6 @@
 """return bytes is a salted hash of the
     input password, hashed with bcrypt.hashpw.
 """
-from typing import TypeVar
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 import bcrypt
