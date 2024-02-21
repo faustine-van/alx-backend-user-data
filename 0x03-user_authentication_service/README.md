@@ -4,12 +4,7 @@
 ### Setup
 You will need to install bcrypt
 ```
-pip3 install bcrypt
-```
-
-Install SQLAlchemy module version 1.4.x
-```
-pip3 install SQLAlchemy
+pip install -r requirements.txt
 ```
 ### Tasks
 Task0. User model
